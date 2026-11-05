@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+/* Main Navigation Bar */
+ul.nav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: #333;
+}
+ul.nav > li {
+  float: left;
+  position: relative;
+  background-color: blue;
+  height: 30px;
+  width: 100px;
+  margin: 1px;
+}
+ul.nav a {
+  display: block;
+  color: white;
+  padding: 6px;
+  text-decoration: none;
+}
+ul.nav li:hover { background-color: #111; }
+
+/* First Level Dropdown */
+ul.dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #333;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 160px;
+}
+ul.nav li:hover > ul.dropdown { display: block; }
+
+/* Second Level Dropdown (Flyout) */
+ul.submenu {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%; /* Positions it to the right of the parent menu */
+  background-color: #444;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  min-width: 160px;
+}
+ul.dropdown li:position-relative { position: relative; } /* Context for submenu */
+ul.dropdown li:hover > ul.submenu { display: block; }
+</style>
+</head>
+<body>
+
+<ul class="nav">
+  <li><a href="#home">Home</a></li>
+  <li style="position: relative;">
+    <a href="#services">Services ▾</a>
+    <!-- Level 1 Dropdown -->
+    <ul class="dropdown">
+      <li><a href="#design">Web Design</a></li>
+      <li style="position: relative;">
+        <a href="#dev">Development ▸</a>
+        <!-- Level 2 Submenu -->
+        <ul class="submenu">
+          <li><a href="#frontend">Frontend</a></li>
+          <li><a href="#backend">Backend</a></li>
+        </ul>
+      </li>
+      <li><a href="#seo">SEO Marketing</a></li>
+    </ul>
+  </li>
+  <li><a href="#contact">Contact</a></li>
+</ul>
+
+</body>
+</html>

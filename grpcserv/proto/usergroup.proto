@@ -1,0 +1,65 @@
+syntax = "proto3";
+package usergroup;
+
+option go_package = "grpcserv/pb";
+
+import "google/protobuf/timestamp.proto";
+
+service UserGroupService {
+  rpc GetUserGroupById (UserGroupRequest) returns (UserGroupResponse);
+  rpc GetUserGroupByCode (UserGroupRequest) returns (UserGroupResponse);
+  rpc AddUserGroup (UserGroupAddRequest) returns (UserGroupResultResponse);
+  rpc SetUserGroup (UserGroupSetRequest) returns (UserGroupResultResponse);
+  rpc GetUserGroupList (UserGroupListRequest) returns (UserGroupListResponse);
+  rpc GetUserGroupCount (UserGroupListRequest) returns (UserGroupCountResponse);
+  rpc DeleteUserGroupById (UserGroupRequest) returns (UserGroupResultResponse);
+  rpc DeleteUserGroupByCode (UserGroupRequest) returns (UserGroupResultResponse);
+}
+
+message UserGroupRequest { 
+  int64 id = 1; 
+  string yug_code = 2; 
+}
+message UserGroupAddRequest { 
+  string yug_code = 1; 
+  string yug_name = 2; 
+  string yug_memo = 3; 
+  int32 yug_retroday = 4;
+  bool yug_active = 5;
+}
+message UserGroupSetRequest { 
+  int64 id = 1; 
+  string yug_code = 2; 
+  string yug_name = 3; 
+  string yug_memo = 4; 
+  int32 yug_retroday = 5;
+  bool yug_active = 6; 
+}
+message UserGroupListRequest { 
+  string filter = 1; 
+  int64 page =2;
+
+}
+message UserGroupResponse { 
+  int64 id = 1; 
+  string yug_code = 2; 
+  string yug_name = 3; 
+  string yug_memo = 4; 
+  int32 yug_retroday = 5;
+  bool yug_active = 6; 
+
+  google.protobuf.Timestamp createdAt = 16;
+  google.protobuf.Timestamp UpdatedAt = 17;
+  google.protobuf.Timestamp DeletedAt = 18; 
+
+}
+message UserGroupListResponse { 
+  repeated UserGroupResponse usergroups = 1; 
+}
+message UserGroupCountResponse { 
+  int64 count = 1; 
+}
+message UserGroupResultResponse { 
+  bool success = 1; 
+}
+

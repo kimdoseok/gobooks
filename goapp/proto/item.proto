@@ -1,0 +1,66 @@
+syntax = "proto3";
+package item;
+
+option go_package = "grpc1/pb";
+
+
+import "google/protobuf/timestamp.proto";
+
+service ItemService {
+  rpc GetItemById (ItemRequest) returns (ItemResponse);
+  rpc GetItemByCode (ItemRequest) returns (ItemResponse);
+  rpc AddItem (ItemAddRequest) returns (ItemResultResponse);
+  rpc SetItem (ItemSetRequest) returns (ItemResultResponse);
+  rpc GetItemList (ItemListRequest) returns (ItemListResponse);
+  rpc GetItemCount (ItemListRequest) returns (ItemCountResponse);
+  rpc DeleteItemById (ItemRequest) returns (ItemResultResponse);
+  rpc DeleteItemByCode (ItemRequest) returns (ItemResultResponse);
+}
+
+message ItemRequest { 
+  int64 id = 1; 
+  string iit_code = 2; 
+}
+message ItemAddRequest { 
+  string iit_code = 1; 
+  string iit_name = 2; 
+  string iit_memo = 3; 
+  int32 iit_retroday = 4;
+  bool iit_active = 5;
+}
+message ItemSetRequest { 
+  int64 id = 1; 
+  string iit_code = 2; 
+  string iit_name = 3; 
+  string iit_memo = 4; 
+  int32 iit_retroday = 5;
+  bool iit_active = 6; 
+}
+message ItemListRequest { 
+  string filter = 1; 
+  int64 page =2;
+
+}
+message ItemResponse { 
+  int64 id = 1; 
+  string iit_code = 2; 
+  string iit_name = 3; 
+  string iit_memo = 4; 
+  int32 iit_retroday = 5;
+  bool iit_active = 6;
+  
+  google.protobuf.Timestamp createdAt = 16;
+  google.protobuf.Timestamp UpdatedAt = 17;
+  google.protobuf.Timestamp DeletedAt = 18; 
+
+}
+message ItemListResponse { 
+  repeated ItemResponse usergroups = 1; 
+}
+message ItemCountResponse { 
+  int64 count = 1; 
+}
+message ItemResultResponse { 
+  bool success = 1; 
+}
+

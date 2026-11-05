@@ -1,0 +1,148 @@
+Here's how to deploy a Docker Compose project with multiple services and images:
+
+1. Define multiple services in compose.yaml:
+
+version: '3.9'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: myapp-frontend:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - API_URL=http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: myapp-backend:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
+
+networks:
+  default:
+    name: myapp-network
+
+
+
+2. Build and deploy all services:
+
+# Build all images
+docker compose build
+
+# Start all services
+docker compose up -d
+
+# View status
+docker compose ps
+
+
+
+3. For production, use overlay compose files:
+
+Create compose.production.yaml:
+
+services:
+  frontend:
+    restart: unless-stopped
+    environment:
+      - DEBUG=false
+
+  backend:
+    restart: unless-stopped
+    environment:
+      - DEBUG=false
+      - LOG_LEVEL=warn
+
+  postgres:
+    restart: unless-stopped
+
+Deploy with:
+
+docker compose -f compose.yaml -f compose.production.yaml up -d
+
+
+
+4. Multi-file organization with include:
+
+compose.yaml:
+
+include:
+  - path: ./infra.yaml
+
+services:
+  app:
+    build: .
+    depends_on:
+      - redis
+infra.yaml:
+
+services:
+  redis:
+    image: redis:alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+Deploy:
+
+docker compose up -d
+
+
+
+5. Push images to registry:
+
+# Tag images
+docker compose build
+docker image tag myapp-frontend:latest myregistry/myapp-frontend:latest
+docker image tag myapp-backend:latest myregistry/myapp-backend:latest
+
+# Push all
+docker compose push
+
+
+Key points:
+
+Each service can have its own build with custom context and dockerfile
+Services communicate via service name (e.g., backend:8000)
+Use depends_on with service_healthy to wait for startup
+healthcheck ensures services are ready before dependents start
+image property tags the built image for push/pull
+Multiple compose files merge at runtime with -f
+All services on same network by default
+Sources:
+
+https://docs.docker.com/guides/docker-compose/
+https://docs.docker.com/get-started/docker-concepts/running-containers/multi-container-applications/
+https://docs.docker.com/compose/gettingstarted/
+Feel free to ask if you need anything else!

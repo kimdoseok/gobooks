@@ -1,0 +1,91 @@
+syntax = "proto3";
+package warehouse;
+
+option go_package = "grpc1/pb";
+
+import "google/protobuf/timestamp.proto";
+
+service WarehouseService {
+  rpc GetWarehouseById (WarehouseRequest) returns (WarehouseResponse);
+  rpc GetWarehouseByCode (WarehouseRequest) returns (WarehouseResponse);
+  rpc AddWarehouse (WarehouseAddRequest) returns (WarehouseResultResponse);
+  rpc SetWarehouse (WarehouseSetRequest) returns (WarehouseResultResponse);
+  rpc GetWarehouseList (WarehouseListRequest) returns (WarehouseListResponse);
+  rpc GetWarehouseCount (WarehouseListRequest) returns (WarehouseCountResponse);
+  rpc DeleteWarehouseById (WarehouseRequest) returns (WarehouseResultResponse);
+  rpc DeleteWarehouseByCode (WarehouseRequest) returns (WarehouseResultResponse);
+}
+
+message WarehouseRequest { 
+  int64 id = 1; 
+  string iwh_code = 2; 
+}
+message WarehouseAddRequest { 
+  string iwh_code = 1; 
+  string iwh_name = 2; 
+  string iwh_namealt = 3; 
+  string iwh_addr1 = 4; 
+  string iwh_addr2 = 5; 
+  string iwh_city = 6; 
+  string iwh_state = 7; 
+  string iwh_country = 8; 
+  string iwh_tel = 9; 
+  string iwh_fax = 10; 
+  string iwh_contact = 11; 
+  string iwh_memo = 12; 
+  int32 iwh_seq = 13;
+  bool iwh_active = 14;
+}
+
+message WarehouseSetRequest { 
+  int64 id = 1; 
+  string iwh_code = 2; 
+  string iwh_name = 3; 
+  string iwh_namealt = 4; 
+  string iwh_addr1 = 5; 
+  string iwh_addr2 = 6; 
+  string iwh_city = 7; 
+  string iwh_state = 8; 
+  string iwh_country = 9; 
+  string iwh_tel = 10; 
+  string iwh_fax = 11; 
+  string iwh_contact = 12; 
+  string iwh_memo = 13; 
+  int32 iwh_seq = 14;
+  bool iwh_active = 15; 
+}
+message WarehouseListRequest { 
+  string filter = 1; 
+  int64 page =2;
+
+}
+message WarehouseResponse { 
+  int64 id = 1; 
+  string iwh_code = 2; 
+  string iwh_name = 3; 
+  string iwh_namealt = 4; 
+  string iwh_addr1 = 5; 
+  string iwh_addr2 = 6; 
+  string iwh_city = 7; 
+  string iwh_state = 8; 
+  string iwh_country = 9; 
+  string iwh_tel = 10; 
+  string iwh_fax = 11; 
+  string iwh_contact = 12; 
+  string iwh_memo = 13; 
+  int32 iwh_seq = 14;
+  bool iwh_active = 15;
+  google.protobuf.Timestamp createdAt = 16;
+  google.protobuf.Timestamp UpdatedAt = 17;
+  google.protobuf.Timestamp DeletedAt = 18; 
+}
+message WarehouseListResponse { 
+  repeated WarehouseResponse usergroups = 1; 
+}
+message WarehouseCountResponse { 
+  int64 count = 1; 
+}
+message WarehouseResultResponse { 
+  bool success = 1; 
+}
+
