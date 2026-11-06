@@ -1,2 +1,2 @@
 # Gobooks
-Quickbooks or MYOB clone with goapp
+Quickbooks or MYOB clone with go-app and grpc

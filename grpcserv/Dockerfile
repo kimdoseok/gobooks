@@ -13,9 +13,8 @@ WORKDIR /build
 
 RUN mkdir log
 RUN mkdir uploads
-RUN mkdir /build/bin/exports
 
-RUN go install
+RUN go build -o /build/bin/grpcserv
 
 # Final image
 FROM alpine

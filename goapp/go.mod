@@ -3,10 +3,13 @@ module goapp
 go 1.26.3
 
 require (
+	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.33.0 // indirect
 	github.com/maxence-charriere/app v1.3.6 // indirect
 	github.com/maxence-charriere/go-app/v11 v11.0.5 // indirect
+	github.com/redis/go-redis/v9 v9.23.0 // indirect
+	go.uber.org/atomic v1.12.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/net v0.61.0 // indirect
 	golang.org/x/sys v0.49.0 // indirect

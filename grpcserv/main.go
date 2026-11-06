@@ -43,7 +43,8 @@ func getPool(ctx context.Context) *pgxpool.Pool {
 }
 
 func runGrpc(ctx context.Context, pool *pgxpool.Pool) {
-	lis, err := net.Listen("tcp", ":50051")
+	url := os.Getenv("GRPC_URL")
+	lis, err := net.Listen("tcp", url)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
@@ -52,7 +53,7 @@ func runGrpc(ctx context.Context, pool *pgxpool.Pool) {
 	repo_user := sy.NewUserRepo(pool, ctx)
 	pb.RegisterUserServiceServer(grpcServer, sy.NewUserService(repo_user))
 
-	log.Println("gRPC server listening on :50051...")
+	log.Println("gRPC server listening on " + url + "...")
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
@@ -60,12 +61,13 @@ func runGrpc(ctx context.Context, pool *pgxpool.Pool) {
 }
 
 func runGateway(ctx context.Context) {
+	url := os.Getenv("GATREWAY_URL")
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	// Register the proxy handler pointing to our background gRPC server port
 	//err := pb.RegisterUserServiceHandlerServer(ctx, mux, opts)
-	err := pb.RegisterUserServiceHandlerFromEndpoint(ctx, mux, "localhost:50051", opts)
+	err := pb.RegisterUserServiceHandlerFromEndpoint(ctx, mux, url, opts)
 	if err != nil {
 		log.Fatalf("Failed to register gateway: %v", err)
 	}
