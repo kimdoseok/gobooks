@@ -46,8 +46,10 @@ services:
       - .env
     depends_on:
       - "postgresdb"  
+      - "redisdb"
     ports:
       - "50051:50051"
+      - "8080:8080"
     build:
       context: ./grpcserv
       dockerfile: Dockerfile
@@ -57,16 +59,17 @@ services:
       - "./storage/log:/grpcserv/log"
       #- "./storage/sqlite:/app/sqlite"
 
-  yew-service:
-    container_name: yew-service
+  goapp:
+    container_name: goapp-service
     restart: always
-    depends_on:
-      - "grpc-service"  
-    ports:
-      - "80:80"
-    env_file: .env
     build:
-      context: ./yewapp
+      context: ./goapp
       dockerfile: Dockerfile
-      args:
-        buildno: 1
+
+    env_file: .env
+    ports:
+      - "443:443"
+      - "80:8000"
+    depends_on:
+      - "redisdb"
+      - "postgresdb"
